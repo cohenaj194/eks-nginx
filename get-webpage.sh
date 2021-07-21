@@ -1,4 +1,11 @@
 #!/bin/bash
-kubectl get svc my-nginx-service
+kubectl --kubeconfig ./kubeconfig get svc my-nginx-service
 
-minikube service my-nginx-service
+lb_url="$(kubectl --kubeconfig ./kubeconfig get svc my-nginx-service | \
+            grep my-nginx-service | \
+            awk '{print $4}')"
+
+curl -k $lb_url
+
+echo $lb_url
+
